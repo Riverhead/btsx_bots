@@ -125,6 +125,18 @@ class BTSX():
         response = self.request("batch", ["wallet_market_cancel_order", cancel_args])
         return cancel_args
 
+    def get_last_fill (self, base, quote):
+        last_fill = -1
+        precision_ratio = 0
+        if base == "USD" and quote == "BTSX":
+            precision_ratio = 10
+        else:
+            raise Exception(" btsx.py  get_last_fill  -  I only know precision for usd and btsx")
+        response = self.request("blockchain_market_order_history", [base, quote, 0, 1])
+        for order in response.json()["result"]:
+            last_fill = float(order["ask_price"]["ratio"]) * 10
+        return last_fill
+
 
     def wait_for_block(self):
         response = self.request("get_info", [])
