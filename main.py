@@ -11,6 +11,7 @@ from btsx import BTSX
 
 from config import read_config
 from bots import MarketMaker
+from bots import MarketSpeculator
 
 from feeds import BterFeeds, BTC38Feeds, Average, Feed
 
