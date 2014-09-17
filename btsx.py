@@ -6,6 +6,7 @@ import time
 
 log = logger.log
 
+
 class BTSX():
     USD_PRECISION = 10000.0
     BTSX_PRECISION = 100000.0
