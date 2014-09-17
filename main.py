@@ -46,7 +46,7 @@ for botconfig in conf["bots"]:
     bot_type = botconfig["bot_type"]
     if bot_type == "market_maker":
         bots.append(MarketMaker(client, feeds, botconfig, log))
-    else if bot_type == "market_speculator":
+    if bot_type == "market_speculator":
         bots.append(MarketSpeculator(client, feeds, botconfig, log))
     else:
         raise Exception("unknown bot type")

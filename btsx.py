@@ -119,8 +119,10 @@ class BTSX():
     def cancel_all_orders(self, account, base, quote):
         response = self.request("wallet_market_order_list", [base, quote, -1, account])
         order_ids = []
-        for item in response.json()["result"]:
-            order_ids.append(item["market_index"]["owner"])
+        for pair in response.json()["result"]:
+            order_id = pair[0]
+            item = pair[1]
+            order_ids.append(order_id)
         cancel_args = [[item] for item in order_ids]
         response = self.request("batch", ["wallet_market_cancel_order", cancel_args])
         return cancel_args
