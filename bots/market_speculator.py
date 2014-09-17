@@ -2,7 +2,6 @@ import time
 from mylog import logger
 log = logger.log
 
-
 # This bot provides liquidity and maintains the peg
 
 class MarketSpeculator():
