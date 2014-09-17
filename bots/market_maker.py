@@ -1,8 +1,5 @@
-from mylog import logger
-log = logger.log
+##  This bot is not suitable for trading real money.
 
-
-# This bot provides liquidity and maintains the peg
 
 MEDIAN_EDGE_MULTIPLE = 1.001
 

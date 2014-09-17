@@ -10,7 +10,7 @@ log = logger.log
 from btsx import BTSX
 
 from config import read_config
-from market_maker import MarketMaker
+from bots import MarketMaker
 
 from feeds import BterFeeds, BTC38Feeds, Average, Feed
 
@@ -43,8 +43,11 @@ for key, feed in feeds.iteritems():
 
 bots = []
 for botconfig in conf["bots"]:
-    if botconfig["bot_type"] == "market_maker":
-        bots.append(MarketMaker(client, feeds, botconfig))
+    bot_type = botconfig["bot_type"]
+    if bot_type == "market_maker":
+        bots.append(MarketMaker(client, feeds, botconfig, log))
+    else if bot_type == "market_speculator":
+        bots.append(MarketSpeculator(client, feeds, botconfig, log))
     else:
         raise Exception("unknown bot type")
 
