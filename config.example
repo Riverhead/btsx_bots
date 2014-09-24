@@ -1,0 +1,33 @@
+{
+    "bots": [
+        {
+            "bot_type": "market_maker", 
+            "account_name": "marketmaker.account", 
+            "spread_percent": 0.05, 
+            "min_order_size": 1000, 
+            "external_price_tolerance": 0.01, 
+            "asset_pair": [
+                "USD", 
+                "BTSX"
+            ], 
+            "min_balance": 100
+        },
+        {
+            "bot_type": "market_speculator",
+            "account_name": "speculator.account",
+            "spread_percent": 0.05,
+            "min_order_size": 1000,
+            "external_price_tolerance": 0.01,
+            "asset_pair": [
+                "USD",
+                "BTSX"
+            ],
+            "min_balance": 100
+        }
+    ], 
+    "client": {
+        "rpc_password": "", 
+        "rpc_user": "", 
+        "rpc_port": ""
+    }
+}
