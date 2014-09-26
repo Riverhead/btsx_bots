@@ -7,6 +7,7 @@ import time
 log = logger.log
 
 class BTSX():
+    CNY_PRECISION = 10000.0
     USD_PRECISION = 10000.0
     BTSX_PRECISION = 100000.0
     
@@ -52,7 +53,8 @@ class BTSX():
 
     def get_lowest_ask(self, asset1, asset2):
         response = self.request("blockchain_market_order_book", [asset1, asset2])
-        return float(response.json()["result"][0][0]["market_index"]["order_price"]["ratio"]) * 10
+        amount = float(response.json()["result"][0][0]["market_index"]["order_price"]["ratio"])
+        return amount 
         
     def get_balance(self, account, asset):
         asset_id = 22
@@ -120,11 +122,14 @@ class BTSX():
     def cancel_all_orders(self, account, base, quote):
         response = self.request("wallet_market_order_list", [base, quote, -1, account])
         order_ids = []
-        for item in response.json()["result"]:
-            order_ids.append(item["market_index"]["owner"])
-        cancel_args = [[item] for item in order_ids]
-        response = self.request("batch", ["wallet_market_cancel_order", cancel_args])
-        return cancel_args
+        print response.json()
+        if "result" in response.json():
+           for item in response.json()["result"]:
+               order_ids.append(item["market_index"]["owner"])
+           cancel_args = [[item] for item in order_ids]
+           response = self.request("batch", ["wallet_market_cancel_order", cancel_args])
+           return cancel_args
+        return
 
     def get_last_fill (self, base, quote):
         last_fill = -1
@@ -135,7 +140,7 @@ class BTSX():
             raise Exception(" btsx.py  get_last_fill  -  I only know precision for usd and btsx")
         response = self.request("blockchain_market_order_history", [quote, base, 0, 1])
         for order in response.json()["result"]:
-            last_fill = float(order["ask_price"]["ratio"]) * 10
+            last_fill = float(order["ask_price"]["ratio"]) 
         return last_fill
 
 
@@ -148,3 +153,7 @@ class BTSX():
             blocknum2 = response.json()["result"]["blockchain_head_block_num"]
             if blocknum2 != blocknum:
                 return
+
+    def get_precision(self, asset):
+        response = self.request("blockchain_get_asset", [asset])
+        return response.json()["result"]["precision"]
