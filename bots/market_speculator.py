@@ -45,6 +45,7 @@ class MarketSpeculator():
 
         #Get the ratio of the last filled order
         last_price = self.client.get_last_fill(self.base_symbol, self.quote_symbol)
+        last_price = last_price * (base_precision / quote_precision)
 
         #Get the ratio of the lowest ask price
         lowest_ask  = self.client.get_lowest_ask(self.quote_symbol, self.base_symbol)
@@ -67,7 +68,7 @@ class MarketSpeculator():
 
         if quote_balance > self.min_quote_balance:
            self.log ("submitting bid for %f" % (lowest_ask * (1-(BEAT_ASK_BY*2))))
-           self.client.submit_bid(self.name, ((quote_balance-min_quote_balance) / (lowest_ask *(1-(BEAT_ASK_BY*2)))), self.base_symbol, lowest_ask * (1-(BEAT_ASK_BY*2)) , self.quote_symbol)
+           self.client.submit_bid(self.name, ((quote_balance-self.min_quote_balance) / (lowest_ask *(1-(BEAT_ASK_BY*2)))), self.base_symbol, lowest_ask * (1-(BEAT_ASK_BY*2)) , self.quote_symbol)
            self.last_bid = lowest_ask * (1-BEAT_ASK_BY*2)
            self.last_ask = 0
 
