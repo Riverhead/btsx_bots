@@ -57,9 +57,8 @@ class BTSX():
         return amount 
         
     def get_balance(self, account, asset):
-        asset_id = 22
-        if asset == "BTSX":
-            asset_id = 0
+
+        asset_id = self.get_asset_id(asset) 
 
         response = self.request("wallet_account_balance", [account, asset])
         if not response.json():
@@ -71,10 +70,7 @@ class BTSX():
         for item in asset_array:
             if item[0] == asset_id:
                 amount = item[1]
-        if asset == "USD":
-            return amount / self.USD_PRECISION
-        if asset == "BTSX":
-            return amount / self.BTSX_PRECISION
+                return amount / self.get_precision(asset)
         log("UNKNOWN ASSET TYPE, CANT CONVERT PRECISION: %s" % asset)
         exit(1)
 
@@ -133,11 +129,6 @@ class BTSX():
 
     def get_last_fill (self, base, quote):
         last_fill = -1
-        precision_ratio = 0
-        if base == "BTSX" and quote == "USD":
-            precision_ratio = 10
-        else:
-            raise Exception(" btsx.py  get_last_fill  -  I only know precision for usd and btsx")
         response = self.request("blockchain_market_order_history", [quote, base, 0, 1])
         for order in response.json()["result"]:
             last_fill = float(order["ask_price"]["ratio"]) 
@@ -157,3 +148,8 @@ class BTSX():
     def get_precision(self, asset):
         response = self.request("blockchain_get_asset", [asset])
         return response.json()["result"]["precision"]
+
+    def get_asset_id(self, asset):
+        response = self.request("blockchain_get_asset", [asset])
+        return response.json()["result"]["id"]
+
