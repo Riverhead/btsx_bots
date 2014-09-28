@@ -45,13 +45,14 @@ for key, feed in feeds.iteritems():
 bots = []
 for botconfig in conf["bots"]:
     bot_type = botconfig["bot_type"]
+    print bot_type
     if bot_type == "market_maker":
         bots.append(MarketMaker(client, feeds, botconfig, log))
-    if bot_type == "market_speculator":
-        bots.append(MarketSpeculator(client, feeds, botconfig, log))
-    else:
-        raise Exception("unknown bot type")
-
+    else: 
+        if bot_type == "market_speculator":
+           bots.append(MarketSpeculator(client, feeds, botconfig, log))
+        else:
+           raise Exception("unknown bot type")
 
 while True:
     for bot in bots:
